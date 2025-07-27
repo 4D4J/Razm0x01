@@ -1,0 +1,10 @@
+EXPORTS
+DllMain
+GetFileVersionInfoSizeW=MyGetFileVersionInfoSizeW
+GetFileVersionInfoW=MyGetFileVersionInfoW
+VerQueryValueW=MyVerQueryValueW
+GetFileVersionInfoSizeA=MyGetFileVersionInfoSizeA
+GetFileVersionInfoA=MyGetFileVersionInfoA
+VerQueryValueA=MyVerQueryValueA
+VerLanguageNameW=MyVerLanguageNameW
+VerLanguageNameA=MyVerLanguageNameA

